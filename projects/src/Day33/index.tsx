@@ -1,9 +1,8 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { addNote, saveNote } from "../redux/reducers/notes";
-import { RootState } from "../redux/store";
+import { addNote } from "../redux/reducers/notes";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -76,45 +75,39 @@ const DivNote = styled.div`
 `;
 
 export default function Notes() {
-  // let arrLocal = JSON.parse(localStorage.getItem("note") || "[]");
-  const notes = useSelector((state: RootState) => state.notesList.notes);
+  let arrLocal = JSON.parse(localStorage.getItem("note") || "[]");
   const [valueInput, setValueInput] = useState<string>("");
-  const [arrNote, setArrNote] = useState<any[]>(notes);
-  const [edit, setEdit] = useState<boolean>(false);
+  const [arrNote, setArrNote] = useState<string[]>(arrLocal);
+  const [edit, setEdit] = useState<boolean>(true);
 
   const dispatch = useDispatch();
 
   const handleAddNote = () => {
-    console.log("arrLocal", notes);
+    console.log("arrLocal", arrLocal);
     let arr: string[] = [];
     arr.push("");
-    setArrNote([...notes, ...arr]);
+    setArrNote([...arrNote, ...arr]);
     console.log(arrNote);
-    // dispatch(addNote(""));
+    dispatch(addNote(''));
   };
 
   const handleSaveNote = (i: number) => {
-    console.log(i);
     if (!edit && valueInput !== "") {
-      dispatch(saveNote(valueInput));
+      localStorage.setItem("note", JSON.stringify([...arrLocal, valueInput]));
     } else if (edit) {
-      dispatch(saveNote(i));
-      // localStorage.setItem("note", JSON.stringify([...arrLocal]));
+      arrLocal[i] = valueInput;
+      localStorage.setItem("note", JSON.stringify([...arrLocal]));
     }
     setEdit(true);
   };
 
-  //   const handleSaveNote = (i: number) => {
-  //     dispatch(saveNote(valueInput));
-  //   }
-
-  //   const handleDelete = (i: number) => {
-  //     let newArr = [...arrLocal];
-  //     console.log(newArr.splice(i, 1))
-  //     console.log(newArr)
-  //     setArrNote([...newArr]);
-  //     localStorage.setItem("note", JSON.stringify(newArr));
-  //   }
+  const handleDelete = (i: number) => {
+    let newArr = [...arrLocal];
+    console.log(newArr.splice(i, 1))
+    console.log(newArr)
+    setArrNote([...newArr]);
+    localStorage.setItem("note", JSON.stringify(newArr));
+  }
 
   return (
     <>
@@ -130,9 +123,7 @@ export default function Notes() {
                   <EditOutlined onClick={() => handleSaveNote(index)} />
                 </i>
                 <i>
-                  <DeleteOutlined
-                  //   onClick={() => handleDelete(index)}
-                  />
+                  <DeleteOutlined onClick={() => handleDelete(index)} />
                 </i>
               </div>
               <div className="content">
