@@ -102,10 +102,6 @@ export default function GithubProfile() {
   const [infoUser, setInfoUser] = useState<IInfo>();
   const [repos, setRepos] = useState<any[]>([]);
 
-  //   useEffect(() => {
-  //     getApi();
-  //   }, [userName]);
-
   const getApi = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
