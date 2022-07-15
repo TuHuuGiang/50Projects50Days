@@ -77,10 +77,18 @@ const DivNote = styled.div`
 export default function Notes() {
   let arrLocal = JSON.parse(localStorage.getItem("note") || "[]");
   const [valueInput, setValueInput] = useState<string>("");
-  const [arrNote, setArrNote] = useState<string[]>(arrLocal);
+  const [arrNote, setArrNote] = useState<string[]>([...arrLocal]);
   const [edit, setEdit] = useState<boolean>(true);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    handleSetValue();
+  }, [arrLocal]);
+
+  const handleSetValue = () => {
+    arrLocal.map((name: string) => setValueInput(name));
+  };
 
   const handleAddNote = () => {
     console.log("arrLocal", arrLocal);
@@ -88,7 +96,7 @@ export default function Notes() {
     arr.push("");
     setArrNote([...arrNote, ...arr]);
     console.log(arrNote);
-    dispatch(addNote(''));
+    dispatch(addNote(""));
   };
 
   const handleSaveNote = (i: number) => {
@@ -103,11 +111,11 @@ export default function Notes() {
 
   const handleDelete = (i: number) => {
     let newArr = [...arrLocal];
-    console.log(newArr.splice(i, 1))
-    console.log(newArr)
+    console.log(newArr.splice(i, 1));
+    console.log(newArr);
     setArrNote([...newArr]);
-    localStorage.setItem("note", JSON.stringify(newArr));
-  }
+    localStorage.setItem("note", JSON.stringify([...newArr]));
+  };
 
   return (
     <>
@@ -129,7 +137,7 @@ export default function Notes() {
               <div className="content">
                 <textarea
                   className="text-area"
-                  defaultValue={note}
+                  value={valueInput}
                   onChange={(e) => setValueInput(e.target.value)}
                 />
               </div>
