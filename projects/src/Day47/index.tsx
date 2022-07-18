@@ -130,11 +130,11 @@ export default function IntroduceUser() {
 
     const updateTestimonial = () => {
         index++
-        const arr = testimonials[index];
-        setArrUser([arr]);
         if (index > testimonials.length - 1) {
             index = 0
         }
+        const arr = testimonials[index];
+        setArrUser([arr]);
     }
 
     return (
