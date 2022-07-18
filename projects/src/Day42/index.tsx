@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import styled from "styled-components";
 
@@ -73,9 +73,17 @@ const Container = styled.div`
   }
 `;
 
+interface IDataUser {
+    image: string;
+    name: string;
+    country: string;
+}
+
 export default function FilterUser() {
-    const [arrUser, setArrUser] = useState<any[]>([]);
+    const [arrUser, setArrUser] = useState<IDataUser[]>([]);
+    const [arrSearch, setArrSearch] = useState<IDataUser[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const typingTimeoutRef = useRef<any>();
 
     useEffect(() => {
         getApiUser();
@@ -84,11 +92,34 @@ export default function FilterUser() {
     const getApiUser = async () => {
         try {
             const apis = await axios('https://randomuser.me/api?results=50');
-            setArrUser(apis.data.results);
-            console.log(apis.data.results)
+            let infoUsers = apis.data.results.map((info: any) => {
+                return {
+                    image: info.picture.large,
+                    name: `${info.name.first} ${info.name.last}`,
+                    country: `${info.location.city} ${info.location.country}`
+                }
+            })
+            setArrUser([...infoUsers]);
         } catch (err) {
             console.log(err)
         }
+    }
+
+    const searchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value;
+        setSearchTerm(e.target.value);
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+        }
+        typingTimeoutRef.current = setTimeout(() => {
+            if (value !== "") {
+                console.log(111)
+                let findUser = arrUser.filter(info => info.name.toLowerCase().includes((value)));
+                setArrSearch([...findUser]);
+            } else {
+                setArrSearch(arrUser)
+            }
+        }, 300);
     }
 
     return (
@@ -98,19 +129,30 @@ export default function FilterUser() {
                     <div className="header">
                         <h4>Live User Filter</h4>
                         <span>Search by name and/or location</span>
-                        <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder='Search ...'/>
+                        <input type="text" value={searchTerm} onChange={(e) => searchUser(e)} placeholder='Search ...'/>
                     </div>
                     <ul className="content">
                         {
-                            arrUser.map((user: any, index: number) => (
-                                <li key={index}>
-                                    <img src={user.picture.large} alt=""/>
-                                    <div className="info">
-                                        <h4>{`${user.name.first} ${user.name.last}`}</h4>
-                                        <p>{`${user.location.city}, ${user.location.country}`}</p>
-                                    </div>
-                                </li>
-                            ))
+                            arrSearch.length > 0 ?
+                                arrSearch.map((user, index) => (
+                                    <li key={index}>
+                                        <img src={user.image} alt=""/>
+                                        <div className="info">
+                                            <h4>{user.name}</h4>
+                                            <p>{user.country}</p>
+                                        </div>
+                                    </li>
+                                ))
+                                :
+                                arrUser.map((user, index) => (
+                                    <li key={index}>
+                                        <img src={user.image} alt=""/>
+                                        <div className="info">
+                                            <h4>{user.name}</h4>
+                                            <p>{user.country}</p>
+                                        </div>
+                                    </li>
+                                ))
                         }
                     </ul>
                 </div>
