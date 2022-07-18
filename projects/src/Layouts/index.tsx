@@ -4,6 +4,7 @@ import AutoTextEffect from "../Day30";
 import Notes from "../Day33";
 import NavigateMobile from "../Day38";
 import FilterUser from "../Day42";
+import IntroduceUser from "../Day47";
 
 export default function Layouts() {
     return (
@@ -17,7 +18,9 @@ export default function Layouts() {
             {/*  Day 38*/}
             {/*<NavigateMobile/>*/}
             {/*Day 42*/}
-            <FilterUser />
+            {/*<FilterUser />*/}
+            {/*Day 47*/}
+            <IntroduceUser />
         </>
     );
 }
