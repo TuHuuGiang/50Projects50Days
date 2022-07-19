@@ -5,6 +5,7 @@ import Notes from "../Day33";
 import NavigateMobile from "../Day38";
 import FilterUser from "../Day42";
 import IntroduceUser from "../Day47";
+import MovieApp from "../Day17";
 
 export default function Layouts() {
     return (
@@ -20,7 +21,9 @@ export default function Layouts() {
             {/*Day 42*/}
             {/*<FilterUser />*/}
             {/*Day 47*/}
-            <IntroduceUser />
+            {/*<IntroduceUser />*/}
+            {/*Day 17*/}
+            <MovieApp />
         </>
     );
 }
