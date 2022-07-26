@@ -93,7 +93,7 @@ export default function MovieApp() {
     const [arrMovie, setArrMovie] = useState<IMovie[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('')
     let urlApi = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=3fd2be6f0c70a2a598f084ddfb75487c&page=1';
-    const typingSearchTime = useRef<any>();
+    const typingSearchTime = useRef() as React.MutableRefObject<any>;
 
     useEffect(() => {
         getApiMovie(urlApi);

@@ -11,7 +11,7 @@ export default function Layouts() {
     return (
         <>
             {/* Day 28 */}
-            {/*<GithubProfile />*/}
+            <GithubProfile />
             {/* Day 30 */}
             {/* <AutoTextEffect />*/}
             {/* Day 33 */}
@@ -23,7 +23,7 @@ export default function Layouts() {
             {/*Day 47*/}
             {/*<IntroduceUser />*/}
             {/*Day 17*/}
-            <MovieApp />
+            {/* <MovieApp /> */}
         </>
     );
 }
